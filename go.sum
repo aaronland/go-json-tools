@@ -1,0 +1,4 @@
+github.com/facebookarchive/atomicfile v0.0.0-20151019160806-2de1f203e7d5 h1:bdjwBDeespjGpbr+gwdswEN/4l1LVsMatRzNDJy1M5Q=
+github.com/facebookarchive/atomicfile v0.0.0-20151019160806-2de1f203e7d5/go.mod h1:cVxST1QmsZ2+gLKjOXU0hgZzk1VRzVsSV4yw0hBAfLg=
+github.com/tidwall/pretty v1.2.0 h1:RWIZEg2iJ8/g6fDDYzMpobmaoGh5OLl4AXtGUGPcqCs=
+github.com/tidwall/pretty v1.2.0/go.mod h1:ITEVvHYasfjBbM0u2Pg8T2nJnzm8xPwvNhhsoaGGjNU=
