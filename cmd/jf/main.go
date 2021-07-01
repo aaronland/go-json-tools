@@ -1,42 +1,78 @@
 package main
 
 import (
-	"flag"
 	"encoding/json"
-	"os"
+	"flag"
+	"fmt"
+	"github.com/facebookarchive/atomicfile"
+	"io"
 	"log"
+	"os"
 )
+
+func Flatten(in io.Reader, out io.Writer) error {
+
+	var tmp interface{}
+
+	dec := json.NewDecoder(in)
+	err := dec.Decode(&tmp)
+
+	if err != nil {
+		return fmt.Errorf("Failed to decode JSON, %w", err)
+	}
+
+	enc := json.NewEncoder(out)
+	err = enc.Encode(tmp)
+
+	if err != nil {
+		log.Fatalf("Failed to encode JSON, %w", err)
+	}
+
+	return nil
+}
 
 func main() {
 
+	input := flag.String("input", "-", "The path to the JSON file to read. If '-' then will read from STDIN.")
+	output := flag.String("output", "-", "The path to the JSON file to produce. If '-' then will write to STDOUT.")
+
 	flag.Parse()
 
-	uris := flag.Args()
+	var r io.Reader
+	var wr io.Writer
 
-	for _, path := range uris {
-
-		fh, err := os.Open(path)
+	switch *input {
+	case "-":
+		r = os.Stdin
+	default:
+		fh, err := os.Open(*input)
 
 		if err != nil {
-			log.Fatalf("Failed to open '%s', %v", path, err)
+			log.Fatalf("Failed to open '%s', %v", *input, err)
 		}
 
 		defer fh.Close()
+		r = fh
+	}
 
-		var tmp interface{}
+	switch *output {
+	case "-":
+		wr = os.Stdout
+	default:
 
-		dec := json.NewDecoder(fh)
-		err = dec.Decode(&tmp)
-
-		if err != nil {
-			log.Fatalf("Failed to decode '%s', %v", path, err)
-		}
-
-		enc := json.NewEncoder(os.Stdout)
-		err = enc.Encode(tmp)
+		fh, err := atomicfile.New(*output, 0644)
 
 		if err != nil {
-			log.Fatalf("Failed to encode '%s', %v", path, err)
+			log.Fatalf("Failed to open '%s' for writing, %v", *output, err)
 		}
+
+		defer fh.Close()
+		wr = fh
+	}
+
+	err := Flatten(r, wr)
+
+	if err != nil {
+		log.Fatal(err)
 	}
 }
