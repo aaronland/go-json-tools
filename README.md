@@ -34,3 +34,12 @@ Or to read from `STDIN`:
 ```
 cat example.json | ./bin/jp -
 ```
+
+### jv
+
+Ensure JSON is valid (where "valid" means it can be parsed)
+
+```
+$> ./bin/jv ~/sfomuseum/go-sfomuseum-media/config/*.json
+```
+
