@@ -2,6 +2,10 @@
 
 There are many tools for working with JSON. These ones are ours.
 
+## Deprecated
+
+This package has been deprecated. These tools have been moved in to [aaronland/go-tools](https://github.com/aaronland/go-tools).
+
 ## Documentation
 
 Documentation is incomplete.
